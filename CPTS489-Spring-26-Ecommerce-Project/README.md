@@ -1,4 +1,4 @@
-# CPTS489-Spring-26-Ecommerce-Project
+# Marketplace App
 
 Usage Instructions:
 - Download all files to a folder
