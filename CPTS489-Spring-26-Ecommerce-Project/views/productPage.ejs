@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">  
+    <link rel="stylesheet" href="/stylesheets/UC04 productPage.css">
+    <link rel="stylesheet" href="/stylesheets/UC09_review.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="mainContainer">
+        <div class="productContainer">
+            <div class="productImage">
+                <img src="<%= product.listImage %>" alt="<%= product.listName %>">
+            </div>
+            <div class="productDesc">
+                <h1><%= product.listName %></h1>
+                <p><%= product.listDesc %></p>
+            </div>
+            <div class="productBuy">
+                <h2>$<%= product.listPrice %></h2>
+
+                <% if (product.listQuantity> 0) { %>
+                    <p>In Stock: <%= product.listQuantity %></p>
+                    <form action="/cart/add" method="POST">
+                        <input type="hidden" name="productId" value="<%= product.listNo %>">
+                        <button type="submit" class="addBtn">Add to Cart</button>
+                    </form>
+                <% } else { %>
+                    <button class="btn btn-secondary" disabled>Out of Stock</button>
+                <% } %>
+            </div>
+        </div>
+
+        <div id="productReviews" class="productReviews">
+            <div class="reviewsHeader">
+                <h2>Reviews</h2>
+                <% if (currentUser) { %>
+                    <button class="btn btn-primary" id="btnReview" type="button">Leave a review</button>
+                <% } %>
+            </div>
+            <div class="reviewForm" id="input_review">
+                <p>Your review</p>
+                <div class="stars">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+                <input type="text" class="form-control" id="review_header" placeholder="Review title">
+                <textarea class="form-control" id="review_body" placeholder="Write your review here..."></textarea>
+                <p id="error" class="error">Please fill all fields and leave a rating</p>
+                <button class="addBtn" id="review_submit" type="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/javascripts/productPage.js"></script>
+</body>
+</html>

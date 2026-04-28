@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">  
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/UC05 cart.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="cartContainer">
+
+        <div class="cartProducts">
+            <% if (cart.length > 0) { %>
+                <% cart.forEach(product => { %>
+                    <div class="cartItem">
+                        <a href="/productPage/<%= product.listNo %>" class="cartItem-link">
+                            <div class="cartItem-image">
+                                <img src="<%= product.listImage %>" alt="<%= product.listName %>">
+                            </div>
+
+                            <div class="cartItem-info">
+                                <p class="productName"><%= product.listName %></p>
+                            </div>
+                        </a>
+
+                        <div class="cartItem-actions">
+                            <p class="productPrice">$<%= product.listPrice %></p>
+                            
+                            <div class="button-group">
+                                <form action="/cart/update" method="POST" class="quantity-form">
+                                    <input type="hidden" name="productId" value="<%= product.listNo %>">
+                                    <div class="qty-row">
+                                        <input type="number" name="quantity" value="<%= product.cartQuantity %>" min="1" max="<%= product.listQuantity %>">
+                                        <button type="submit" class="btn-update">Update</button>
+                                    </div>
+                                </form>
+                                
+                                <form action="/cart/remove" method="POST" class="remove-form">
+                                    <input type="hidden" name="productId" value="<%= product.listNo %>">
+                                    <button type="submit" class="btn-remove">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="empty-cart">No items in cart</div>
+            <% } %>
+        </div>
+
+        <div class="cartSummary">
+            <h2>Subtotal</h2>
+            <p class="productPrice">$<%= subtotal %></p>
+            <form action="/cart/checkout" method="GET">
+                <button type="submit" class="btn btn-primary">Continue to Checkout</button>
+            </form>
+            </a>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

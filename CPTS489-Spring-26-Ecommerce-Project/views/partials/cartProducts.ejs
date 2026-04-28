@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/stylesheets/UC05 cart.css">
+
+<% if (listings.length > 0) { %>
+    <div class="cartProducts">
+        <% listings.forEach(product => { %>
+            <div class="productContainer">
+                <a href="/productPage/<%= product.listNo %>">
+                    <div class="productImage">
+                        <img src="<%= product.listImage %>" alt="<%= product.listName %>">
+                    </div>
+                    <div class="productInfo">
+                        <p class="productName"><%= product.listName %></p>
+                        <p class="productPrice">$<%= product.listPrice %></p>
+                    </div>
+                </a>
+
+                <div class="cartItem-actions">
+                    <form action="/cart/update" method="POST" class="quantity-form">
+                        <input type="hidden" name="productId" value="<%= product.listNo %>">
+                        <label>Quantity:</label>
+                        <input type="number" name="quantity" value="<%= product.cartQuantity || 1 %>" min="1" max="<%= product.listQuantity %>">
+                        <button type="submit" class="btn-update">Update</button>
+                    </form>
+                    
+                    <form action="/cart/remove" method="POST">
+                        <input type="hidden" name="productId" value="<%= product.listNo %>">
+                        <button type="submit" class="btn-remove">Remove</button>
+                    </form>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p>No items in cart</p>
+<% } %>

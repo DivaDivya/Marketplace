@@ -1,0 +1,63 @@
+.main {
+    margin-top: 100px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.checkout {
+    display: none;
+}
+
+.checkout.visible{
+    background-color: white;
+    padding: 10px;
+    display: inline-block;
+    width: 40%;
+    margin-right: 20px;
+}
+
+.checkout input {
+    width: 49%;
+    margin-bottom: 10px;
+}
+
+.checkout h1 {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#card {
+    width: 98%;
+}
+
+.cardSelect {
+    width: 49%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.cartBox {
+    background-color: white;
+    display: inline-block;
+    width: 15%;
+    padding: 20px;
+    border-style: solid;
+    border-radius: 50px;
+}
+
+.cartBox p {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.error {
+    display: none;
+}
+
+.error.visible{
+    display: flex;
+    color: red;
+    margin-bottom: 2px;
+    font-size: 15px;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View System Analytics</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/UC-014.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="mainContainer">
+        <aside class="filtersContainer">
+            <h2>View Analytics</h2>
+            <hr>
+            <p class="sectionLabel">System overview</p>
+        </aside>
+        <main class="itemsContainer">
+            <h2>System Analytics</h2>
+            <div class="analyticsCard">
+                <h3>Overview</h3>
+                <p class="itemMeta"><span class="statusTag">Users: <%= stats.totalUsers %></span></p>
+                <p class="itemMeta"><span class="statusTag">Products: <%= stats.totalProducts %></span></p>
+                <p class="itemMeta"><span class="statusTag">Orders: <%= stats.totalOrders %></span></p>
+                <p class="itemMeta"><span class="statusTag">Revenue: $<%= stats.totalRevenue %></span></p>
+                
+                <h3 style="margin-top: 30px;">Orders by Seller</h3>
+                <div class="chartBox">
+                    <% if (topSellers.length === 0) { %>
+                        <p class="itemMeta">No order data yet</p>
+                    <% } else { %>
+                        <% topSellers.forEach(seller => { %>
+                        <div class="barGroup">
+                            <div class="bar" style="height: <%= (seller.orderCount / maxOrders) * 150 %>px;"></div>
+                            <p class="barLabel" title="<%= seller.sellerName %>"><%= seller.sellerName.split(' ')[0] %></p>
+                            <p class="barCount"><%= seller.orderCount %></p>
+                        </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+        </main>
+    </div>    
+</body>
+</html>

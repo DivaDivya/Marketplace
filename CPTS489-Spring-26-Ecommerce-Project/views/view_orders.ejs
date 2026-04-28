@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">  
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/UC-012.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="mainContainer">
+        <aside class="filtersContainer">
+        <h2>View Orders</h2>
+        <hr>
+        <p class="sectionLabel">Orders for seller products</p>
+        </aside>
+        <main class="itemsContainer">
+        <h2>Orders for My Listings</h2>
+        <% if (sellerOrders.length === 0) { %>
+            <p>No orders found.</p>
+        <% } %>
+        <% sellerOrders.forEach(order => { %>
+            <div class="orderCard">
+            <div class="orderTop">
+                <div>
+                <h3>Order #<%= order.orderId %></h3>
+                <p class="itemMeta">
+                    <span class="statusTag"><%= order.productName %></span>
+                </p>
+                <p class="itemMeta">Customer: <%= order.customerName %></p>
+                <p class="itemMeta">Quantity: <%= order.quantity %></p>
+                <p class="itemMeta">Date: <%= order.date %></p>
+                </div>
+            </div>
+            </div>
+        <% }) %>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

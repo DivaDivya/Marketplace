@@ -1,0 +1,46 @@
+
+.searchContainer {
+    display: flex;
+    gap: 5px;
+}
+
+.filtersContainer {
+    flex: 1;
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+}
+
+.itemsContainer {
+    flex: 10;
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+}
+
+.main {
+    margin-top: 100px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.history {
+    padding: 20px;
+    margin: 0px;
+    width: 60%;
+    background-color: white;
+}
+
+.history p {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.history table {
+    width: 100%
+}
+
+.history table tr {
+    height: 50px;
+}

@@ -1,0 +1,110 @@
+
+.mainContainer {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.filtersContainer {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.itemsContainer {
+    flex: 3;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.sectionLabel,
+.itemMeta {
+    color: #555;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.userCard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+}
+
+.userTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.userCard h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+}
+
+.roleTag {
+    display: inline-block;
+    padding: 4px 10px;
+    margin-right: 8px;
+    border-radius: 20px;
+    background-color: #e8f5f1;
+    color: rgb(17, 157, 129);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.userActions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btnView {
+    background-color: rgb(17, 157, 129);
+    color: white;
+}
+
+.btnDelete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btnDisabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
+.btnView:hover {
+    background-color: rgb(13, 130, 106);
+}
+
+.btnDelete:hover {
+    background-color: #b02a37;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 15px 0;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+label {
+    font-size: 15px;
+}

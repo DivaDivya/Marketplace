@@ -1,0 +1,102 @@
+h1{
+    display: inline-block;
+}
+
+#btnReview{
+    float: right;
+}
+
+.input_box{
+    display: none;
+    padding: 30px;
+    border-style: solid;
+    border-radius: 50px;
+    border-color: grey;
+    border-width: 1px;
+}
+
+.input_box p{
+    display: inline-block;
+    width: 220px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.input_box span{
+    font-size: 20px;
+}
+
+#review_body {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 100px;
+}
+
+.productReviews {
+    background: white;
+    border-radius: 10px;
+    border: 0.5px solid #e0e0e0;
+    padding: 24px;
+}
+
+.reviewsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.reviewsHeader h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.reviewForm p {
+    margin: 0;
+}
+
+.star {
+    font-size: 28px;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.star.selected {
+    color: rgb(17, 157, 129);
+}
+
+.reviewForm {
+    display: none;
+}
+
+.reviewForm.visible {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px;
+    border: 0.5px solid #e0e0e0;
+    margin-top: 12px;
+}
+
+.revTitle {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.review h2 {
+    margin-bottom: 0px;
+    font-size: 25px;
+}
+
+.error {
+    display: none;
+}
+
+.error.visible {
+    display: flex;
+    color: red;
+    font-size: 15px;
+}

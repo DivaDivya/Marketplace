@@ -1,0 +1,67 @@
+.mainContainer {
+    margin: 20px;
+}
+
+#payment_info h2{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#profile_info h1{
+margin-top: 20px;
+margin-bottom: 20px;
+}
+
+#add_card{
+    display: block;
+}
+
+.saved_card{
+    display: inline-block;
+    border-style: solid;
+    border-color: grey;
+    border-radius: 50px;
+    border-width: 1px;
+    width: 350px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.saved_card table{
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.inputPopUp {
+    display: none;
+}
+
+.inputPopUp.visible {
+    margin: 0px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+    border-radius: 20px;
+    background-color: lightblue;
+}
+
+#newPass {
+    width: 90%;
+    margin-right: 10px;
+}
+
+.cardField{
+    width: 23%;
+    margin-right: 10px;
+}
+
+.error {
+    display: none;
+}
+
+.error.visible {
+    display: flex;
+    color: red;
+    font-size: 15px;
+}

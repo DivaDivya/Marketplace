@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderate Reviews</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/UC-015.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="mainContainer">
+        <aside class="filtersContainer">
+            <h2>Moderate Reviews</h2>
+            <hr>
+            <p class="sectionLabel">Admin can remove reviews.</p>
+        </aside>
+        <main class="itemsContainer">
+            <h2>Review Moderation</h2>
+            <% if (reviews.length === 0) { %>
+                <p>No reviews found.</p>
+            <% } %>
+            <% reviews.forEach(review => { %>
+                <div class="reviewCard">
+                    <div class="reviewTop">
+                        <div>
+                            <h3><%= review.productName %></h3>
+                            <p class="itemMeta">
+                                <span class="statusTag">Rating: <%= review.rating %>/5</span>
+                                <span class="statusTag">Review ID: R<%= review.id %></span>
+                            </p>
+                            <p class="itemMeta"><strong>User:</strong> <%= review.userName %></p>
+                            <% if (review.title) { %>
+                                <p class="itemMeta"><strong><%= review.title %></strong></p>
+                            <% } %>
+                            <% if (review.desc) { %>
+                                <p class="reviewText">"<%= review.desc %>"</p>
+                            <% } %>
+                            </div>
+                            <div class="reviewActions">
+                                <form action="/admin/reviews/<%= review.id %>/delete" method="POST">
+                                    <button class="btn btnDelete" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </main>
+    </div>
+</body>
+</html>

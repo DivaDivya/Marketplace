@@ -1,0 +1,175 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.logo {
+    background-color: rgb(17, 157, 129);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 80px;
+    gap: 16px;
+    font-family: 'Arial', sans-serif;
+}
+
+.logo a {
+    color: rgb(240, 255, 255);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.logo img {
+    transition: filter 0.15s ease;
+    cursor: pointer;
+    filter: invert(1);
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+.logo img:hover {
+    filter: invert(1) brightness(0.6);
+}
+
+.logo img:active {
+    filter: invert(1) brightness(0.3);
+}
+
+.logo .title {
+    font-size: 28px;
+    font-weight: bolder;
+    flex-shrink: 0;
+    color: rgb(240, 255, 255);
+}
+
+.logo .search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+}
+
+.logo .search input {
+    width: 100%;
+    min-width: 80px;
+}
+
+.logo .search form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.logo .search button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.logo .cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.logo .cart a {
+    position: relative;
+    display: inline-block;
+}
+
+.logo .user {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.logo .user .btn {
+    color: rgb(240, 255, 255);
+    border: 1.5px solid rgba(240, 255, 255, 0.6);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.logo .user .btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.logo .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: red;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* User menu for logged-in users */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.user-menu .user-link {
+    color: rgb(240, 255, 255);
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+.user-menu .user-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.user-menu .profile-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    filter: invert(1);
+}
+
+.user-menu .logout-btn {
+    background: transparent;
+    color: rgb(240, 255, 255);
+    border: 1.5px solid rgba(240, 255, 255, 0.6);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+}
+
+.user-menu .logout-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}

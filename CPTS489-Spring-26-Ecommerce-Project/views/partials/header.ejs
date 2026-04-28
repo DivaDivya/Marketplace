@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="/stylesheets/style.css">
+
+<div class="logo">
+    <a href="/" class="title">Grocery Store</a>
+
+    <div class="search">
+        <form action="/search" method="GET" class="search">
+            <input type="text" name="q" class="form-control" placeholder="Search" value="<%= typeof searchTerm !== 'undefined' ? searchTerm : '' %>">
+            <input type="hidden" name="minPrice" value="<%= typeof minPrice !== 'undefined' ? minPrice : '' %>">
+            <input type="hidden" name="maxPrice" value="<%= typeof maxPrice !== 'undefined' ? maxPrice : '' %>">
+            <% if (typeof inStock !== 'undefined' && inStock) { %>
+                <input type="hidden" name="inStock" value="true">
+            <% } %>
+            <button type="submit">
+                <img src="/images/search.png" alt="Search">
+            </button>
+        </form>
+    </div>
+
+    <div class="cart">
+        <a href="/cart">
+            <img src="/images/cart.png" alt="Cart">
+        </a>
+    </div>
+
+    <!-- if signed in show profile button, otherwise show login/register buttons -->
+    <div class="user">
+        <% if (currentUser) { %>
+            <div class="user-menu">
+                <% if (currentUser.type === 'seller') { %>
+                    <a href="/add_item" class="user-link">Add Item</a>
+                    <a href="/seller/products" class="user-link">My Listings</a>
+                    <a href="/seller/orders" class="user-link">Seller Orders</a>
+                <% } else if (currentUser.type === 'admin') { %>
+                    <a href="/admin/users" class="user-link">Manage Users</a>
+                    <a href="/admin/analytics" class="user-link">Analytics</a>
+                    <a href="/admin/reviews" class="user-link">Reviews</a>
+                <% } %>
+                    <a href="/users/profile" class="user-link">
+                        <img src="/images/profile.png" alt="Profile" class="me-1">
+                    </a>
+
+                <form action="/users/logout_user" method="POST">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        <% } else { %>
+            <a href="/users/login" class="btn">Log in</a>
+            <a href="/users/register" class="btn">Register</a>
+        <% } %>
+    </div>
+</div> 

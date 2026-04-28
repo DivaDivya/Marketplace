@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/UC-013.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="mainContainer">
+        <aside class="filtersContainer">
+            <h2>Manage Users</h2>
+            <hr>
+            <p class="sectionLabel">Admin can view and delete non-admin accounts.</p>
+        </aside>
+        <main class="itemsContainer">
+            <h2>User Accounts</h2>
+            <% users.forEach(user => { %>
+                <div class="userCard">
+                    <div class="userTop">
+                        <div>
+                            <h3><%= user.actFname %> <%= user.actLname %></h3>
+                            <p class="itemMeta">
+                                <span class="roleTag"><%= user.actType %></span>
+                            </p>
+                            <p class="itemMeta">Email: <%= user.actEmail %></p>
+                        </div>
+                        <div class="userActions">
+                            <% if (user.actType === 'admin') { %>
+                                <a class="btn btnDisabled" href="#">Cannot Delete</a>
+                            <% } else { %>
+                                <form action="/admin/users/<%= user.actEmail %>/delete" method="POST">
+                                <button class="btn btnDelete" type="submit">Delete</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </main>
+    </div>
+</body>
+</html>

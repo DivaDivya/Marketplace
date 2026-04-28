@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/stylesheets/UC03 search.css">
+
+<% if (listings.length > 0) { %>
+    <div class="itemsContainer">
+        <% listings.forEach(product => { %>
+            <div class="productContainer">
+                <a href="/productPage/<%= product.listNo %>">
+                    <div class="productImage">
+                        <img src="<%= product.listImage %>" alt="<%= product.listName %>">
+                    </div>
+                    <p class="productName"><%= product.listName %></p>
+                    <p class="productPrice">$<%= product.listPrice %></p>
+                </a>
+                <% if (product.listQuantity > 0) { %>
+                <form action="/cart/add" method="POST">
+                    <input type="hidden" name="productId" value="<%= product.listNo %>">
+                    <button type="submit" class="addBtn">Add to Cart</button>
+                </form>
+                <% } else { %>
+                <button class="btn btn-secondary" disabled>Out of Stock</button>
+                <% } %>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p>No products found</p>
+<% } %>

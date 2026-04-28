@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit/Delete Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">  
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/UC-011.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="mainContainer">
+        <aside class="filtersContainer">
+            <h2>Edit/Delete Product</h2>
+            <hr>
+            <h3>My Listings</h3>
+            <p class="sectionLabel">Seller can edit or delete their own products.</p>
+        </aside>
+        <main class="itemsContainer">
+            <h2>My Listings</h2>
+            <% if (products.length === 0) { %>
+                <p>No listings yet.</p>
+            <% } %>
+            <% products.forEach(product => { %>
+                <div class="productCard">
+                    <div class="productTop">
+                        <div>
+                            <h3><%= product.listName %></h3>
+                            <p class="itemMeta">
+                                <span class="statusTag">$<%= product.listPrice.toFixed(2) %></span>
+                            </p>
+                            <p class="itemMeta"><%= product.listDesc %></p>
+                            <p class="itemMeta">Stock: <%= product.listQuantity %></p>
+                        </div>
+                        <div class="productActions">
+                            <a class="btn btnEdit" href="/productPage/<%= product.listNo %>">View</a>
+                            <a class="btn btnEdit" href="/seller/products/<%= product.listNo %>/edit">Edit</a>
+                            <form action="/seller/products/<%= product.listNo %>/delete" method="POST">
+                                <button class="btn btnDelete" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
