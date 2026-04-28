@@ -17,7 +17,7 @@ router.get('/users', function(req, res, next) {
 
     if (err) return next(err);
 
-    res.render('UC-013', { users });
+    res.render('manage_users', { users });
   });
 });
 
@@ -121,7 +121,7 @@ router.get('/analytics', function(req, res, next) {
                     ? Math.max(...topSellers.map(s => s.orderCount))
                     : 1;
 
-                res.render('UC-014', {
+                res.render('analytics', {
                   stats: {
                     totalUsers: usersRow.count,
                     totalProducts: productsRow.count,
@@ -167,7 +167,7 @@ router.get('/reviews', function(req, res, next) {
 
       if (err) return next(err);
 
-      res.render('UC-015', { reviews: reviewData });
+      res.render('reviews', { reviews: reviewData });
     }
   );
 });

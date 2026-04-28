@@ -6,6 +6,7 @@ var sqlite3 = require('sqlite3').verbose();
 router.get('/', function(req, res, next) {
   const db = new sqlite3.Database('./storedb.sqlite');
   const userEmail = res.locals.currentUser ? res.locals.currentUser.email : null;
+  if (!userEmail) return res.redirect('/');
 
   db.all(
     `SELECT * FROM cart 
@@ -33,6 +34,7 @@ router.get('/', function(req, res, next) {
 router.get('/checkout', function(req, res, next) {
   const db = new sqlite3.Database('./storedb.sqlite');
   const userEmail = res.locals.currentUser ? res.locals.currentUser.email : null;
+  if (!userEmail) return res.redirect('/');
 
   db.all(
     `SELECT * FROM cart 

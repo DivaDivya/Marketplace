@@ -20,7 +20,7 @@ router.get('/products', function(req, res) {
 
       if (err) return res.status(500).send(err.message);
 
-      res.render('UC-011', { ...res.locals, products: listings });
+      res.render('edit_item', { ...res.locals, products: listings });
     }
   );
 });
@@ -87,7 +87,7 @@ router.get('/orders', function(req, res) {
 
       if (err) return res.status(500).send(err.message);
 
-      res.render('UC-012', { sellerOrders });
+      res.render('order_history', { sellerOrders });
     }
   );
 });

@@ -1,32 +1,35 @@
 var express = require('express');
 var router = express.Router();
 var sqlite3 = require('sqlite3').verbose();
+var multer = require('multer');
+var path = require('path');
+
+// Multer setup - saves uploaded images to public/images/
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../public/images'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+var upload = multer({ storage: storage });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   const db = new sqlite3.Database('./storedb.sqlite');
-
   db.all('SELECT * FROM listings', [], (err, listings) => {
     db.close();
-
-    if (err) {
-      return next(err);
-    }
-
+    if (err) return next(err);
     res.render('home', { ...res.locals, listings });
   });
 });
 
 router.post('/homePopulate', function(req, res, next) {
   const db = new sqlite3.Database('./storedb.sqlite');
-
   db.all('SELECT * FROM listings', [], (err, rows) => {
     db.close();
-
-    if (err) {
-      return next(err);
-    }
-
+    if (err) return next(err);
     res.send(rows);
   });
 });
@@ -42,12 +45,8 @@ router.get('/order_history', function(req, res, next) {
     [userEmail],
     (err, orders) => {
       db.close();
-
-      if (err) {
-        return next(err);
-      }
-
-      res.render('order_history', { ...res.locals, orders: orders });
+      if (err) return next(err);
+      res.render('order_history', { ...res.locals, orders });
     }
   );
 });
@@ -64,42 +63,34 @@ router.get('/profile', function(req, res, next) {
   res.render('update_profile', { title: 'Express' });
 });
 
-router.post('/createListing', function(req, res, next) {
-  var listNo = 1;
+router.post('/createListing', upload.single('image'), function(req, res, next) {
   var listName = req.body.name;
   var listDesc = req.body.desc;
-  var listImage = req.body.image;
   var listPrice = req.body.price;
   var listQuantity = req.body.quantity;
   var listSeller = req.body.email;
+  var listImage = req.file ? '/images/' + req.file.filename : null;
+
+  if (!listImage) {
+    return res.status(400).send('Image upload failed.');
+  }
 
   const db = new sqlite3.Database('./storedb.sqlite');
 
-  db.get(`SELECT COUNT(*) AS count FROM listings`, [], (err, row) => {
-    if (err) {
+  db.run(
+    `INSERT INTO listings (listName, listDesc, listImage, listPrice, listQuantity, listSeller)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [listName, listDesc, listImage, listPrice, listQuantity, listSeller],
+    function(err) {
       db.close();
-      return next(err);
-    }
-
-    listNo = listNo + row.count;
-
-    db.run(
-      `INSERT INTO listings (listNo, listName, listDesc, listImage, listPrice, listQuantity, listSeller)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [listNo, listName, listDesc, "/images/" + listImage, listPrice, listQuantity, listSeller],
-      function(err) {
-        db.close();
-
-        if (err) {
-          console.log(err);
-          return next(err);
-        }
-
-        console.log("Added listing " + listName);
-        res.redirect('/');
+      if (err) {
+        console.log(err);
+        return next(err);
       }
-    );
-  });
+      console.log('Added listing ' + listName);
+      res.redirect('/');
+    }
+  );
 });
 
 module.exports = router;

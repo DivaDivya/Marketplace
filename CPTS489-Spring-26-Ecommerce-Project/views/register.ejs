@@ -15,26 +15,33 @@
             <div class="col-md-6 col-lg-5">
                 <div class="card shadow-sm p-4">
                     <h2 class="text-center mb-4">Register</h2>
+                    <% if (locals.error) { %>
+                        <div class="alert alert-danger"><%= error %></div>
+                    <% } %>
 
-                    <form action="/users/add_user" method="POST">
+                    <form action="/users/add_user" method="POST" id="registerForm" novalidate>
                         <div class="mb-3">
                             <label for="fname" class="form-label">First Name</label>
                             <input type="text" id="fname" name="fname" class="form-control" required>
+                            <div class="invalid-feedback">First name is required.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="lname" class="form-label">Last Name</label>
                             <input type="text" id="lname" name="lname" class="form-control" required>
+                            <div class="invalid-feedback">Last name is required.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
+                            <input type="text" id="email" name="email" class="form-control" required>
+                            <div class="invalid-feedback">Email must contain an '@' sign.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" name="password" class="form-control" required>
+                            <input type="password" id="password" name="password" class="form-control" required minlength="4">
+                            <div class="invalid-feedback">Password must be at least 4 characters.</div>
                         </div>
 
                         <div class="mb-4">
@@ -44,6 +51,7 @@
                                 <option value="customer">Customer</option>
                                 <option value="seller">Seller</option>
                             </select>
+                            <div class="invalid-feedback">Please select an account type.</div>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">Register</button>
@@ -59,5 +67,46 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+        const form = document.getElementById('registerForm');
+
+        function validateEmail(input) {
+            const valid = input.value.includes('@');
+            input.setCustomValidity(valid ? '' : "Email must contain an '@' sign.");
+            input.classList.toggle('is-invalid', !valid);
+            input.classList.toggle('is-valid', valid);
+        }
+
+        function validatePassword(input) {
+            const valid = input.value.length >= 4;
+            input.setCustomValidity(valid ? '' : 'Password must be at least 4 characters.');
+            input.classList.toggle('is-invalid', !valid);
+            input.classList.toggle('is-valid', valid);
+        }
+
+        function validateRequired(input) {
+            const valid = input.value.trim() !== '';
+            input.classList.toggle('is-invalid', !valid);
+            input.classList.toggle('is-valid', valid);
+        }
+
+        form.addEventListener('submit', function (e) {
+            validateEmail(document.getElementById('email'));
+            validatePassword(document.getElementById('password'));
+
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+
+        // Real-time validation on blur
+        document.getElementById('email').addEventListener('blur', function () { validateEmail(this); });
+        document.getElementById('password').addEventListener('blur', function () { validatePassword(this); });
+        document.getElementById('fname').addEventListener('blur', function () { validateRequired(this); });
+        document.getElementById('lname').addEventListener('blur', function () { validateRequired(this); });
+        document.getElementById('type').addEventListener('blur', function () { validateRequired(this); });
+    </script>
 </body>
 </html>

@@ -2,17 +2,14 @@ var express = require('express');
 var router = express.Router();
 var sqlite3 = require('sqlite3').verbose();
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-/* GET login page. */
 router.get('/login', function(req, res, next) {
   res.render('index');
 });
 
-/* GET register page. */
 router.get('/register', function(req, res, next) {
   res.render('register');
 });
@@ -21,7 +18,6 @@ router.get('/profile', function(req, res, next) {
   res.render('update_profile', { title: 'Express' });
 });
 
-// Registration
 router.post('/add_user', function(req, res, next) {
   var fname = req.body.fname;
   var lname = req.body.lname;
@@ -36,22 +32,24 @@ router.post('/add_user', function(req, res, next) {
   const db = new sqlite3.Database('./storedb.sqlite');
 
   db.run(
-    `INSERT INTO accounts (actEmail, actPassword, actFname, actLname, actType)
-     VALUES (?, ?, ?, ?, ?)`,
-    [email, password, fname, lname, type],
+    `INSERT INTO accounts (actEmail, actFname, actLname, actPassword, actType) VALUES (?, ?, ?, ?, ?)`,
+    [email, fname, lname, password, type],
     function(err) {
       db.close();
-
       if (err) {
+        if (err.message.includes('UNIQUE constraint failed')) {
+          return res.render('register', {
+            ...res.locals,
+            error: 'An account with this email already exists.'
+          });
+        }
         return next(err);
       }
-
-      console.log("Added user " + email + " as " + type);
-      res.redirect('/users/login');
+      res.redirect('/');
     }
   );
 });
-// Log in
+
 router.post('/login_user', function(req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
@@ -66,7 +64,6 @@ router.post('/login_user', function(req, res, next) {
         db.close();
         return next(err);
       }
-
       if (user) {
         res.cookie('user', {
           email: user.actEmail,
@@ -74,30 +71,27 @@ router.post('/login_user', function(req, res, next) {
           lastName: user.actLname,
           type: user.actType
         });
-
         db.all(
           'SELECT cartList, cartQuantity FROM cart WHERE cartAct = ?',
           [user.actEmail],
           function(err, rows) {
             db.close();
-
-            if (err) {
-              return next(err);
-            }
-
+            if (err) return next(err);
             res.locals.userCart = rows || [];
             res.redirect('/');
           }
         );
       } else {
         db.close();
-        res.render('index');
+        res.render('index', {
+          ...res.locals,
+          error: 'Invalid email or password.'
+        });
       }
     }
   );
 });
 
-// Log out
 router.post('/logout_user', function(req, res, next) {
   res.clearCookie('user');
   res.redirect('/');

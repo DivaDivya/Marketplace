@@ -36,7 +36,6 @@ db.serialize(() => {
   db.run(
   `INSERT OR IGNORE INTO accounts (actEmail, actPassword, actFname, actLname, actType)
    VALUES (?, ?, ?, ?, ?)`,
-  ["admin@email.com", "admin123", "Admin", "User", "admin"]
   );
 
   db.run(`CREATE TABLE IF NOT EXISTS card (

@@ -3,44 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
+    <title><%= locals.products ? 'My Listings' : 'Edit Product' %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/UC10_add_item.css">
+    <link rel="stylesheet" href="/stylesheets/UC07_style.css">
 </head>
 <body>
     <%- include('partials/header') %>
 
-    <div class="mainContainer">
-        <div class="productContainer">
-            <div class="productImage">
-                <h1>Product Image</h1>
-                <% if (product.listImage) { %>
-                    <img src="<%= product.listImage %>" alt="Current image" style="max-width: 200px; margin-bottom: 10px;">
-                <% } %>
-                <input id="item_image" name="image" type="file" accept="image/*" class="form-control">
-                <div id="selectedImg"></div>
-            </div>
-            <div class="productDesc">
-                <h1>Edit Product Information</h1>
-                <form action="/seller/products/<%= product.listNo %>/edit" method="POST">
-                    <input id="item_name" name="name" type="text" class="form-control" placeholder="Product Name" value="<%= product.listName %>">
-                    <input id="item_price" name="price" type="text" class="form-control" placeholder="Product price ($00.00)" value="<%= product.listPrice %>">
-                    <input id="item_quantity" name="quantity" type="text" class="form-control" placeholder="Quantity" value="<%= product.listQuantity %>">
-                    <textarea id="item_desc" name="desc" class="form-control" rows="17" placeholder="Product Description"><%= product.listDesc %></textarea>
-                    <input type="hidden" name="image" id="hidden_image" value="">
-                    <% if (error) { %>
-                        <p class="error"><%= error %></p>
+    <% if (locals.products) { %>
+        <!-- My Listings View -->
+        <div class="main">
+            <div class="history">
+                <p>My Listings</p>
+                <table>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    <% if (products.length > 0) { %>
+                        <% products.forEach(product => { %>
+                        <tr>
+                            <td><img src="<%= product.listImage %>" alt="<%= product.listName %>" style="width:60px; height:60px; object-fit:cover;"></td>
+                            <td><%= product.listName %></td>
+                            <td>$<%= product.listPrice %></td>
+                            <td><%= product.listQuantity %></td>
+                            <td><%= product.listDesc %></td>
+                            <td>
+                                <a href="/seller/products/<%= product.listNo %>/edit" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-pencil"></i> Edit
+                                </a>
+                                <form action="/seller/products/<%= product.listNo %>/delete" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="6">No listings found</td></tr>
                     <% } %>
-                    <button type="submit" class="btn btn-primary">Update Product</button>
-                    <a href="/seller/products" class="btn btn-secondary">Cancel</a>
-                </form>
+                </table>
             </div>
         </div>
-    </div>
-    
 
+    <% } else { %>
+        <!-- Edit Product View -->
+        <div class="mainContainer">
+            <div class="productContainer">
+                <div class="productImage">
+                    <h1>Product Image</h1>
+                    <% if (product.listImage) { %>
+                        <img src="<%= product.listImage %>" alt="Current image" style="max-width: 200px; margin-bottom: 10px;">
+                    <% } %>
+                    <input id="item_image" name="image" type="file" accept="image/*" class="form-control">
+                    <div id="selectedImg"></div>
+                </div>
+                <div class="productDesc">
+                    <h1>Edit Product Information</h1>
+                    <form action="/seller/products/<%= product.listNo %>/edit" method="POST">
+                        <input id="item_name" name="name" type="text" class="form-control" placeholder="Product Name" value="<%= product.listName %>">
+                        <input id="item_price" name="price" type="text" class="form-control" placeholder="Product price ($00.00)" value="<%= product.listPrice %>">
+                        <input id="item_quantity" name="quantity" type="text" class="form-control" placeholder="Quantity" value="<%= product.listQuantity %>">
+                        <textarea id="item_desc" name="desc" class="form-control" rows="17" placeholder="Product Description"><%= product.listDesc %></textarea>
+                        <input type="hidden" name="image" id="hidden_image" value="">
+                        <% if (error) { %>
+                            <p class="error"><%= error %></p>
+                        <% } %>
+                        <button type="submit" class="btn btn-primary">Update Product</button>
+                        <a href="/seller/products" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="javascripts/add_item.js"></script>
