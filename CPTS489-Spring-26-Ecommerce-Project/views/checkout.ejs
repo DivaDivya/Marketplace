@@ -1,83 +1,116 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check out</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/UC06_style.css">
 </head>
-    <body>
-    <%- include('partials/header') %>
+<body>
+<%- include('partials/header') %>
 
-    <div class="main">
-        <div id="enterCard" class="checkout visible">
-            <h1>Please input checkout information</h1>
-            <input type="text" id="fname" placeholder="First Name">
-            <input type="text" id="lname" placeholder="Last Name">
-            <input type="text" id="card" placeholder="Card Number">
-            <input type="text" id="experation" placeholder="Experation Date">
-            <input type="text" id="cvv" placeholder="CVV">
-            <p class="error" id="error">ERROR: Invalid Information</p>
-            <form action="/cart/doCheckout" method="POST">
-                <Button type="button" id ="useCardBtn" class="btn btn-primary">Use Saved Card</button>
-                <Button type="submit" id ="btnSubmit" class="btn btn-primary">Check out</button>
-            </form>
+<div class="main">
+    <!-- Step indicator -->
+    <div class="checkout-steps">
+        <span class="step active">1. Payment Details</span>
+        <span class="step-arrow">›</span>
+        <span class="step">2. Review Order</span>
+        <span class="step-arrow">›</span>
+        <span class="step">3. Payment Success</span>
+    </div>
+
+    <div class="checkout-body">
+        <!-- Panel wrapper: both card panels live here, only one visible at a time -->
+        <div class="panel-wrapper">
+            <!-- Enter new card panel -->
+            <div id="enterCard" class="checkout visible">
+                <h1>Payment Details</h1>
+                <form action="/cart/reviewOrder" method="POST" id="newCardForm">
+                    <div class="form-row">
+                        <input type="text" name="fname" id="fname" placeholder="First Name">
+                        <input type="text" name="lname" id="lname" placeholder="Last Name">
+                    </div>
+                    <input type="text" name="card" id="card" placeholder="Card Number (16 digits)">
+                    <div class="form-row">
+                        <input type="text" name="experation" id="experation" placeholder="Expiry MM/YY">
+                        <input type="text" name="cvv" id="cvv" placeholder="CVV">
+                    </div>
+                    <p class="error" id="error">Please fill in all fields correctly.</p>
+                    <div class="form-actions">
+                        <button type="button" id="useCardBtn" class="btn btn-outline-secondary">Use Saved Card</button>
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">Review Order →</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Use saved card panel -->
+            <div id="useCard" class="checkout">
+                <h1>Payment Details</h1>
+                <form action="/cart/reviewOrder" method="POST" id="savedCardForm">
+                    <input type="hidden" name="savedCard" id="savedCardValue">
+                    <label class="field-label">Select a saved card</label>
+                    <select class="cardSelect" id="cardSelect">
+                        <option value="">-- Select Card --</option>
+                        <% if (cards.length > 0) { %>
+                            <% cards.forEach(card => { %>
+                                <option value="<%= card.cardName %>"><%= card.cardName %></option>
+                            <% }) %>
+                        <% } %>
+                    </select>
+                    <input type="text" name="cvv" id="cvv2" placeholder="CVV">
+                    <p class="error" id="error2">Please select a card and enter your CVV.</p>
+                    <div class="form-actions">
+                        <button type="button" id="enterCardBtn" class="btn btn-outline-secondary">Enter New Card</button>
+                        <button type="submit" id="btnSubmit2" class="btn btn-primary">Review Order →</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div id="useCard" class="checkout">
-            <h1>Choose which card to use</h1>
-            <select class="cardSelect" name="type" id="cardSelect">
-                <option value="">-- Select Card --</option>
-                <% if (cards.length > 0) { %>
-                    <% cards.forEach( cards => { %>
-                        <option value="<%= cards.cardName %>"><%= cards.cardName %></option>
-                <% })} %>
-            </select>
-            <input type="text" id="cvv2" placeholder="CVV">
-            <p class="error" id="error2">ERROR: Invalid Information</p>
-            <form action="/cart/doCheckout" method="POST">
-                <Button type="button" id ="enterCardBtn" class="btn btn-primary">Enter Card</button>
-                <Button type="submit" id ="btnSubmit2" class="btn btn-primary">Check out</button>
-            </form>
-        </div>
+
+        <!-- Cart summary sidebar -->
         <div class="cartBox">
             <p>Your Cart</p>
-            <table style=width:100%>
-            <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Cost</th>
-            </tr>
-            <% if (cart.length > 0) { %>
-                <% cart.forEach(product => { %>
+            <table style="width:100%">
                 <tr>
-                    <td><%= product.listName %></td>
-                    <td><%= product.cartQuantity %></td>
-                    <td>$<%= product.listPrice %></td>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Price</th>
                 </tr>
-            <% }) %>
-            <% } else { %>
-                <td>No items in cart</td>
-            <% } %>
-            <tr>
-                <td></td>
-                <th>Subtotal</th>
-                <td>$<%= subtotal %></td>
-            </tr>
-            <tr>
-                <td></td>
-                <th>Tax</th>
-                <td>$<%= parseFloat(subtotal*.088).toFixed(2) %></td>
-            </tr>
-            <tr>
-                <td></td>
-                <th>Total</th>
-                <td>$<%= parseFloat(subtotal*1.088).toFixed(2) %></td>
-            </tr>
+                <% if (cart.length > 0) { %>
+                    <% cart.forEach(product => { %>
+                    <tr>
+                        <td><%= product.listName %></td>
+                        <td><%= product.cartQuantity %></td>
+                        <td>$<%= (product.listPrice * product.cartQuantity).toFixed(2) %></td>
+                    </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr><td colspan="3">No items in cart</td></tr>
+                <% } %>
+                <tr class="divider-row"><td colspan="3"></td></tr>
+                <tr>
+                    <td></td>
+                    <th>Subtotal</th>
+                    <td>$<%= subtotal %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <th>Tax (8.8%)</th>
+                    <td>$<%= parseFloat(subtotal * 0.088).toFixed(2) %></td>
+                </tr>
+                <tr class="total-row">
+                    <td></td>
+                    <th>Total</th>
+                    <td>$<%= parseFloat(subtotal * 1.088).toFixed(2) %></td>
+                </tr>
             </table>
+            <a href="/cart" class="btn btn-sm btn-outline-secondary back-to-cart">← Back to Cart</a>
         </div>
     </div>
-    <script src="/javascripts/checkout.js"></script>
-    </body>
-</html> 
+</div>
+
+<script src="/javascripts/checkout.js"></script>
+</body>
+</html>

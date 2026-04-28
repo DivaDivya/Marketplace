@@ -64,7 +64,51 @@ router.get('/checkout', function(req, res, next) {
   );
 });
 
-// perform checkout
+// order review page - shown after card details, before payment is processed
+router.post('/reviewOrder', function(req, res, next) {
+  const db = new sqlite3.Database('./storedb.sqlite');
+  const userEmail = res.locals.currentUser ? res.locals.currentUser.email : null;
+  if (!userEmail) return res.redirect('/');
+
+  // Pass card details through hidden fields so they survive to the next step
+  const cardDetails = {
+    fname: req.body.fname || '',
+    lname: req.body.lname || '',
+    card: req.body.card || '',
+    experation: req.body.experation || '',
+    cvv: req.body.cvv || '',
+    savedCard: req.body.savedCard || ''
+  };
+
+  db.all(
+    `SELECT * FROM cart
+     JOIN listings ON cart.cartList = listings.listNo
+     WHERE cart.cartAct = ?`,
+    [userEmail],
+    (err, cartData) => {
+      if (err) { db.close(); return next(err); }
+
+      if (cartData.length === 0) {
+        db.close();
+        return res.redirect('/cart');
+      }
+
+      const subtotal = cartData.reduce(
+        (total, item) => total + (item.listPrice * item.cartQuantity), 0
+      );
+
+      db.close();
+      res.render('order_review', {
+        ...res.locals,
+        cart: cartData,
+        subtotal: subtotal.toFixed(2),
+        cardDetails
+      });
+    }
+  );
+});
+
+// perform checkout - now redirects to success page
 router.post('/doCheckout', function(req, res, next) {
   const db = new sqlite3.Database('./storedb.sqlite');
   const userEmail = res.locals.currentUser ? res.locals.currentUser.email : null;
@@ -72,42 +116,56 @@ router.post('/doCheckout', function(req, res, next) {
   const date = new Date();
   const formattedDate = `${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`;
 
-  db.all(`SELECT * FROM cart WHERE cartAct = ?`, [userEmail], (err, cartData) => {
-    if (err) return next(err);
+  db.all(
+    `SELECT * FROM cart
+     JOIN listings ON cart.cartList = listings.listNo
+     WHERE cart.cartAct = ?`,
+    [userEmail],
+    (err, cartData) => {
+      if (err) { db.close(); return next(err); }
 
-    if (cartData.length === 0) {
-      db.close();
-      return res.redirect('/');
-    }
+      if (cartData.length === 0) {
+        db.close();
+        return res.redirect('/cart');
+      }
 
-    let completed = 0;
+      const subtotal = cartData.reduce(
+        (total, item) => total + (item.listPrice * item.cartQuantity), 0
+      );
 
-    cartData.forEach(item => {
-      db.get(`SELECT * FROM listings WHERE listNo = ?`, [item.cartList], (err, listing) => {
-        if (err) return next(err);
+      let completed = 0;
 
-        const newQuant = listing.listQuantity - item.cartQuantity;
+      cartData.forEach(item => {
+        db.get(`SELECT * FROM listings WHERE listNo = ?`, [item.cartList], (err, listing) => {
+          if (err) return next(err);
 
-        db.run(`UPDATE listings SET listQuantity = ? WHERE listNo = ?`,
-          [newQuant, item.cartList]);
+          const newQuant = listing.listQuantity - item.cartQuantity;
+          db.run(`UPDATE listings SET listQuantity = ? WHERE listNo = ?`, [newQuant, item.cartList]);
 
-        db.run(
-          `INSERT INTO orders (orderDate, orderQuantity, orderList, orderAct)
-           VALUES (?, ?, ?, ?)`,
-          [formattedDate, item.cartQuantity, item.cartList, userEmail],
-          () => {
-            completed++;
-            if (completed === cartData.length) {
-              db.run(`DELETE FROM cart WHERE cartAct = ?`, [userEmail], () => {
-                db.close();
-                res.redirect('/');
-              });
+          db.run(
+            `INSERT INTO orders (orderDate, orderQuantity, orderList, orderAct)
+             VALUES (?, ?, ?, ?)`,
+            [formattedDate, item.cartQuantity, item.cartList, userEmail],
+            () => {
+              completed++;
+              if (completed === cartData.length) {
+                db.run(`DELETE FROM cart WHERE cartAct = ?`, [userEmail], () => {
+                  db.close();
+                  // Render success page with order summary instead of redirect to home
+                  res.render('order_success', {
+                    ...res.locals,
+                    cart: cartData,
+                    subtotal: subtotal.toFixed(2),
+                    orderDate: formattedDate
+                  });
+                });
+              }
             }
-          }
-        );
+          );
+        });
       });
-    });
-  });
+    }
+  );
 });
 
 // add to cart
