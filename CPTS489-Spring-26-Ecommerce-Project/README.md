@@ -1,4 +1,4 @@
-# Marketplace App
+# DivMarketplace App
 
 Usage Instructions:
 - Download all files to a folder
